@@ -1,7 +1,9 @@
-# HE280AccelerometerInterface
+# Rostock Max HE280 Probe Adaptor
 
-This is a simple Arduino program for interfacing a Teensy 3/3.2 to Seemecnc's HE280 hotend probe for use with a Duet controller or other 3D printer controllers that do not have i2c probing options.
+The SeeMeCNC Rostock Max [v2](https://github.com/seemecnc/RostockMAXv2)/[v3](https://github.com/seemecnc/Rostock-MAX-v3)/[v3.2](https://github.com/seemecnc/RostockMaxV3.2) printer with the [HE280 end effector](https://github.com/ultimachine/HE280PCB) platform uses an accelerometer [ST IIS2DH](https://www.st.com/en/mems-and-sensors/iis2dh.html) to sense when the printer nozzle tip hits the glass print bed to perform bed probing and leveling. Unfortunately, SeeMeCNC provided a custom version of the Repetier firmware to use this probe, and then stopped updating the firmware at the [customized SeeMeCNC Repetier version 0.92.2](https://github.com/seemecnc/Firmware).
 
-This can easily work with other micro controllers. I used a 3.2 because it's both 5v tolerant and 3v3 output, which is what the Duet needs. The HE280 uses a 3v Accelerometer IC, but the PCB has logic level shifting to 5v.
+This project uses the idea from [trash80's HE280 interface](https://github.com/trash80/HE280AccelerometerInterface) project, but using most of the original SeeMeCNC code to interface with the accelerometer. The SeeMeCNC code is usually part of Repetier, uploaded to the [RAMBo 3D printer controlller electronics](https://github.com/ultimachine/RAMBo). The trash80 library is meant to connect the HE280 to a Duet2 controller using a [teensy 3.x microcontroller](https://www.pjrc.com/).
 
-Pin configuration is commented in the main source file.
+Wanting to use the HE280 properly with my existing RAMBo board, I tried the trash80 code on a Teensy 4.0. It wasn't working correctly for use with the RAMBo and Repetier 1.0.5 (I haven't tried the trash80 code with the Duet2). My HE280 is SeeMeCNC item # 71210, HE280PCB REV 5c. I created a version of the trash80 adaptor that readies the accelerometer, and then pulses the probe trigger line high for 10 ms before returning low. It automatically re-arms the accelerometer probe and waits for another nozzle probe hit. This works well with the Repetier firmware.
+
+Pin configuration is commented in the main source file. A diagram shows the required wiring.
